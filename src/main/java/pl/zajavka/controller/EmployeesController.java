@@ -1,6 +1,7 @@
 package pl.zajavka.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,16 +20,35 @@ public class EmployeesController {
 
     @PostMapping("/add")
     public String addEmployee(
-            @RequestParam(value = "name") String name,
-            @RequestParam(value = "surname") String surname,
-            @RequestParam(value = "salary") String salary
+            @Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO
     ) {
         EmployeeEntity newEmployee = EmployeeEntity.builder()
-                .name(name)
-                .surname(surname)
-                .salary(new BigDecimal(salary))
-                .build();
+                .name(employeeDTO.getName())
+                .surname(employeeDTO.getSurname())
+                .salary(employeeDTO.getSalary())
+                .phone(employeeDTO.getPhone())
+                .email(employeeDTO.getEmail())
+                        .build();
         employeeRepository.save(newEmployee);
+        return "redirect:/employees";
+    }
+
+    @PutMapping("/update")
+    public String updateEmployee(
+            @Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO
+    ) {
+        EmployeeEntity existingEmployee
+                = employeeRepository.findById(employeeDTO.getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("EmployeeEntity not found, employeeId: [%s]",
+                                employeeDTO.getEmployeeId())));
+
+        existingEmployee.setName(employeeDTO.getName());
+        existingEmployee.setSurname(employeeDTO.getSurname());
+        existingEmployee.setSalary(employeeDTO.getSalary());
+        existingEmployee.setPhone(employeeDTO.getPhone());
+        existingEmployee.setEmail(employeeDTO.getEmail());
+        employeeRepository.save(existingEmployee);
         return "redirect:/employees";
     }
 
@@ -36,7 +56,7 @@ public class EmployeesController {
     public String employeesList(Model model) {
         List<EmployeeEntity> allEmployees = employeeRepository.findAll();
         model.addAttribute("employees", allEmployees);
-        model.addAttribute("updateEmployeeDTO", new UpdateEmployeeDTO());
+        model.addAttribute("employeeDTO", new EmployeeDTO());
         return "employees";
     }
 
@@ -47,23 +67,6 @@ public class EmployeesController {
                         String.format("EmployeeEntity not found, employeeId: [%s]", employeeId)));
         model.addAttribute("employee", employeeDetails);
         return "employeeDetails";
-    }
-
-    @PutMapping("/update")
-    public String updateEmployee(
-            @ModelAttribute("updateEmployeeDTO") UpdateEmployeeDTO updateEmployeeDTO
-    ) {
-        EmployeeEntity existingEmployee
-                = employeeRepository.findById(updateEmployeeDTO.getEmployeeId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("EmployeeEntity not found, employeeId: [%s]",
-                                updateEmployeeDTO.getEmployeeId())));
-
-        existingEmployee.setName(updateEmployeeDTO.getName());
-        existingEmployee.setSurname(updateEmployeeDTO.getSurname());
-        existingEmployee.setSalary(updateEmployeeDTO.getSalary());
-        employeeRepository.save(existingEmployee);
-        return "redirect:/employees";
     }
 
     @DeleteMapping("/delete/{employeeId}")

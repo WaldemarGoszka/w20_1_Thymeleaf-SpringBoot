@@ -26,16 +26,22 @@ public class BootstrapApplicationComponent implements ApplicationListener<Contex
                 .name("Stefan")
                 .surname("Zajavka")
                 .salary(new BigDecimal("52322.00"))
+                .phone("+48 854 145 332")
+                .email("stefan@mail.com")
                 .build());
         employeeRepository.save(EmployeeEntity.builder()
                 .name("Agnieszka")
                 .surname("Spring")
                 .salary(new BigDecimal("62341.00"))
+                .phone("+48 854 143 332")
+                .email("agnieszka@mail.com")
                 .build());
         employeeRepository.save(EmployeeEntity.builder()
                 .name("Tomasz")
                 .surname("Hibernate")
                 .salary(new BigDecimal("53231.00"))
+                .phone("+48 854 166 332")
+                .email("tomasz@mail.com")
                 .build());
     }
 }

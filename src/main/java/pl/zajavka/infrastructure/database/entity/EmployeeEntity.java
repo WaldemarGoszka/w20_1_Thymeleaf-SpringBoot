@@ -1,10 +1,10 @@
 package pl.zajavka.infrastructure.database.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -25,4 +25,9 @@ public class EmployeeEntity {
     private String surname;
     @Column(name = "salary")
     private BigDecimal salary;
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "email")
+    private String email;
+
 }
