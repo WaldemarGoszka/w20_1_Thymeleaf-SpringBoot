@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(MockitoExtension.class)
-public class EmployeesControllerTest {
+public class EmployeesControllerMockitoTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
