@@ -36,9 +36,9 @@ class EmployeesControllerWebMvcTest {
         // when, then
         if (correctPhone) {
             mockMvc.perform(post("/employees/add").params(parameters))
-                    .andExpect(status().isOk())
+                    .andExpect(status().isFound())
                     .andExpect(model().attributeDoesNotExist("errorMessage"))
-                    .andExpect(view().name("employees"));
+                    .andExpect(view().name("redirect:/employees"));
         } else {
             mockMvc.perform(post("/employees/add").params(parameters))
                     .andExpect(status().isBadRequest())
@@ -63,6 +63,11 @@ class EmployeesControllerWebMvcTest {
                 Arguments.of(false, "(21 7777"),
                 Arguments.of(false, "+48 (21)"),
                 Arguments.of(false, "+"),
+                Arguments.of(false, " 1"),
+                Arguments.of(false, "1"),
+                Arguments.of(false, "+48 (12) 504 203 260"),
+                Arguments.of(false, "+48 (12) 504-203-260"),
+                Arguments.of(false, "+48(12)504203260"),
                 Arguments.of(false, "555-5555-555"),
                 Arguments.of(true, "+48 504 203 260")
         );
