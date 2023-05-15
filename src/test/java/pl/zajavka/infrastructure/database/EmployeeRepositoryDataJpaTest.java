@@ -16,8 +16,6 @@ import static pl.zajavka.util.EntityFixtures.someEmployee2;
 import static pl.zajavka.util.EntityFixtures.someEmployee3;
 
 
-//@DataJpaTest
-//@TestPropertySource(locations = "classpath:application-test.yml")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class EmployeeRepositoryDataJpaTest  extends AbstractJpaIT{
 
